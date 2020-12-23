@@ -10,5 +10,5 @@ resource "random_password" "password" {
 }
 
 output "value" {
-  value = random_password.password[var.password_count - 1].result
+  value = random_password.password[29].result
 }

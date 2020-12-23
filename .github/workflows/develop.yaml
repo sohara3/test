@@ -56,11 +56,14 @@ jobs:
         run: |
           echo "${{ steps.file_changes.outputs.files }}"
           echo "${{ contains(steps.file_changes.outputs.files, matrix.tf_working_dir) }}"
+          echo "IS_CHANGED=${{ contains(steps.file_changes.outputs.files, matrix.tf_working_dir) }}" >> $GITHUB_ENV
       - name: Terraform Init
+        if: ${{env.IS_CHANGED == 'true' }}
         run: |
           cd ${{ matrix.tf_working_dir }}/environment/${{ env.ENVIRONMENT }}
           terraform init
       - name: Terraform Plan
+        if: ${{env.IS_CHANGED == 'true' }}
         run: |
           cd ${{ matrix.tf_working_dir }}/environment/${{ env.ENVIRONMENT }}
           terraform plan
