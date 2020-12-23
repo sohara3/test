@@ -1,4 +1,4 @@
-variable "password_count" {
+variable "password_counts" {
   type    = number
   default = 0
 }
@@ -10,5 +10,5 @@ resource "random_password" "password" {
 }
 
 output "value" {
-  value = random_password.password[var.password_count - 1].result
+  value = random_password.password[var.password_counts - 1].result
 }
