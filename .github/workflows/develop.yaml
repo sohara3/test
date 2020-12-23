@@ -5,6 +5,7 @@ on:
 
 env:
   tf_version: "0.13.5"
+  ENVIRONMENT: "sandbox"
 
 jobs:
   Lint:
