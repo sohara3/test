@@ -3,7 +3,21 @@ name: push-develop
 on: 
 - push
 
+env:
+  tf_version: "0.13.5"
+
 jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: ${{ env.tf_version }}
+
+      - name: Terraform fmt
+        run: terraform fmt -recursive 
+
   changes:
     runs-on: ubuntu-latest
     steps:
@@ -19,3 +33,34 @@ jobs:
           echo '${{ steps.file_changes.outputs.files_modified}}'
           echo '${{ steps.file_changes.outputs.files_added}}'
           echo '${{ steps.file_changes.outputs.files_removed}}'
+
+  Infrastructure:
+    needs: Lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tf_working_dir:
+          - infrastructure
+          - test
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@master
+      - name: Terrform Setup
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: ${{ env.tf_version }}
+      - id: file_changes
+        uses: trilom/file-changes-action@v1.2.4
+      - name: find directories
+        run: |
+          echo "${{ steps.file_changes.outputs.files }}"
+          echo "${{ contains(steps.file_changes.outputs.files, matrix.tf_working_dir) }}"
+      - name: Terraform Init
+        run: |
+          cd ${{ matrix.tf_working_dir }}/environment/${{ env.ENVIRONMENT }}
+          terraform init
+      - name: Terraform Plan
+        run: |
+          cd ${{ matrix.tf_working_dir }}/environment/${{ env.ENVIRONMENT }}
+          terraform plan
+
