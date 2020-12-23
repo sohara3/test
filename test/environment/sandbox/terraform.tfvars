@@ -1,1 +1,1 @@
-password_counts = 10
+password_counts = 30
