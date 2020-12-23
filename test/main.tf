@@ -4,7 +4,7 @@ variable "password_counts" {
 }
 
 resource "random_password" "password" {
-  count            = var.password_count
+  count            = var.password_counts
   length           = 16
   override_special = "!#$%&*-_=+[]{}<>:?"
 }
