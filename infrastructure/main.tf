@@ -1,3 +1,8 @@
+variable "password_count" {
+  type    = number
+  default = 0
+}
+
 resource "random_password" "password" {
   count            = var.password_count
   length           = 16
