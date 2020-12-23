@@ -1,0 +1,11 @@
+#  Local .terraform directories
+**/.terraform/*
+# Terraform bin file
+terraform
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+.idea
+*.zip
+*.jks
